@@ -48,12 +48,13 @@ app.post("/booklog", (req, res) => {
     title: req.body.title,
     comment: req.body.comment,
   };
-  // const q = "insert to booklog values SET ?";
-  const q = "insert into booklog(title, comment) values(?,?)";
-  connection.query(q, [bookLog.title, bookLog.comment], (err, result) => {
+
+  const q = "insert into booklog SET ?";
+  connection.query(q, bookLog, (err) => {
     if (err) throw err;
     getDataBase();
   });
+
   // 例外処理
   if (!(bookLog.title && bookLog.comment)) {
     return res.json({
@@ -82,11 +83,13 @@ app.put("/booklog/:id", (req, res) => {
       error: "invalid parameter",
     });
   }
+  const bookLog = {
+    title: req.body.title,
+    comment: req.body.comment,
+  };
 
-  const q = `UPDATE booklog SET title=?, comment=? WHERE id=${String(
-    req.params.id
-  )}`;
-  connection.query(q, [req.body.title, req.body.comment], (err) => {
+  const q = `UPDATE booklog SET ? WHERE id=?`;
+  connection.query(q, [bookLog, String(req.params.id)], (err) => {
     if (err) throw err;
     getDataBase();
   });
