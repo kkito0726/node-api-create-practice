@@ -20,10 +20,13 @@ connection.connect((err) => {
 });
 
 const getDataBase = () => {
-  connection.query("SELECT * FROM booklog", (err, response) => {
-    if (err) throw err;
-    console.log(response);
-  });
+  connection.query(
+    "SELECT * FROM booklog WHERE deleted_at IS NULL",
+    (err, response) => {
+      if (err) throw err;
+      console.log(response);
+    }
+  );
 };
 
 app.use(express.json());
@@ -109,9 +112,9 @@ app.delete("/booklog/:id", (req, res) => {
   const str_idx = String(req.params.id);
   // bookLogs.splice(index, 1);
 
-  const q = `delete from booklog where id = ?`;
+  const q = "UPDATE booklog SET deleted_at=? WHERE id=?";
   console.log(q);
-  connection.query(q, str_idx, (err) => {
+  connection.query(q, [new Date(), str_idx], (err) => {
     if (err) throw err;
     getDataBase();
   });
