@@ -9,6 +9,7 @@ const connection = mysql.createConnection({
   user: "root",
   password: "Example_db01",
   database: "booklog",
+  stringifyObjects: true, // SQLインジェクション対策
 });
 
 connection.connect((err) => {
@@ -52,8 +53,9 @@ app.post("/booklog", (req, res) => {
     comment: req.body.comment,
   };
 
-  const q = "insert into booklog SET ?";
-  connection.query(q, bookLog, (err) => {
+  // const q = "insert into booklog SET ?"; この書き方だとSQLインジェクションができてしまう
+  const q = "INSERT INTO booklog (title, comment) VALUE (?, ?)";
+  connection.query(q, [bookLog.title, bookLog.comment], (err) => {
     if (err) throw err;
     getDataBase();
   });
