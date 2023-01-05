@@ -68,9 +68,11 @@ app.post("/booklog", (req, res) => {
     });
   }
 
-  //   レスポンス
-  // bookLogs.push(bookLog);
-  // res.json(bookLog);
+  // const q = "insert into booklog SET ?"; この書き方だとSQLインジェクションができてしまう
+  const q = "INSERT INTO booklog (title, comment) VALUE (?, ?)";
+  connection.query(q, [bookLog.title, bookLog.comment], (err) => {
+    if (err) throw err;
+  });
   res.send("Add record to Table");
 });
 
