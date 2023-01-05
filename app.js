@@ -109,9 +109,9 @@ app.delete("/booklog/:id", (req, res) => {
   const str_idx = String(req.params.id);
   // bookLogs.splice(index, 1);
 
-  const q = `delete from booklog where id = ${str_idx}`;
+  const q = `delete from booklog where id = ?`;
   console.log(q);
-  connection.query(q, (err) => {
+  connection.query(q, str_idx, (err) => {
     if (err) throw err;
     getDataBase();
   });
