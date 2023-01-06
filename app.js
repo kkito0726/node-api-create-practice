@@ -1,6 +1,7 @@
 const express = require("express");
 const mysql = require("mysql2");
 const app = express();
+const cors = require("cors");
 const port = 4000;
 
 const connection = mysql.createConnection({
@@ -23,6 +24,7 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("sever");
+  res.json({ appTitle: booklog });
 });
 
 // データベースの情報を取得
@@ -95,6 +97,7 @@ app.delete("/booklog/:id", (req, res) => {
   res.send(`Deleted id = ${str_idx}`);
 });
 
+app.use(cors);
 app.listen(port, () => {
   console.log("sever started");
 });
