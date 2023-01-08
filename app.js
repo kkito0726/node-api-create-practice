@@ -29,6 +29,7 @@ app.get("/", (req, res) => {
 
 // データベースの情報を取得
 app.get("/booklog", (req, res) => {
+  res.set({ "Access-Control-Allow-Origin": "*" });
   connection.query(
     "SELECT * FROM booklog WHERE deleted_at IS NULL",
     (err, response) => {
@@ -40,6 +41,7 @@ app.get("/booklog", (req, res) => {
 
 // レコードを追加
 app.post("/booklog", (req, res) => {
+  res.set({ "Access-Control-Allow-Origin": "*" });
   const bookLog = {
     title: req.body.title,
     comment: req.body.comment,
