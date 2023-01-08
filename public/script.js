@@ -4,11 +4,8 @@ const titleRef = document.querySelector("#title");
 const commentRef = document.querySelector("#comment");
 
 const getDatabase = async () => {
-  const res = await fetch(`${url}/booklog`, {
-    method: "GET",
-  });
+  const res = await fetch(`${url}/booklog`);
   const data = await res.json();
-  console.log(res.status);
   console.log(data);
   data.map((x) => {
     const spanRef = document.createElement("span");
@@ -21,14 +18,24 @@ const getDatabase = async () => {
 const postDatabese = async () => {
   const title = titleRef.value;
   const comment = commentRef.value;
-  // console.log(JSON.stringify({ title, comment }));
+
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("comment", comment);
+
   const res = await fetch(`${url}/booklog`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ title, comment }),
   });
+  // const res = await fetch(`${url}/booklog`, {
+  //   method: "POST",
+  //   body: formData,
+  // });
+
+  // const res = await fetch(`${url}/booklog`, {
+  //   method: "POST",
+  //   body: JSON.stringify({ title: title, comment: comment }),
+  // });
   console.log(res.status);
 };
 
@@ -42,10 +49,3 @@ postButton.addEventListener("click", async () => {
   await postDatabese();
   await getDatabase();
 });
-
-console.log(
-  JSON.stringify({
-    title: "title",
-    comment: "comment",
-  })
-);
